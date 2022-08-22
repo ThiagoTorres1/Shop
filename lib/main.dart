@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shop/models/product_list.dart';
+import 'package:shop/pages/product_detail_page.dart';
 import 'package:shop/pages/product_overview_page.dart';
 import 'package:shop/utils/app_routes.dart';
 
@@ -11,12 +14,26 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Shop',
-      debugShowCheckedModeBanner: false,
-      routes: {
-        AppRoutes.HOME: (ctx) => ProductOverviewPage(),
-      },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => ProductList(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Shop',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData().copyWith(
+          colorScheme: ThemeData().colorScheme.copyWith(
+                primary: Colors.purple,
+                secondary: Colors.deepOrange,
+              ),
+        ),
+        routes: {
+          AppRoutes.HOME: (ctx) => ProductOverviewPage(),
+          AppRoutes.PRODUCT_DETAIL: (ctx) => ProductDetailPage(),
+        },
+      ),
     );
   }
 }
