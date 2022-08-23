@@ -33,6 +33,11 @@ class MyApp extends StatelessWidget {
                 primary: Colors.purple,
                 secondary: Colors.deepOrange,
               ),
+          textTheme: ThemeData().textTheme.copyWith(
+                headline6: const TextStyle(
+                  fontFamily: 'Lato',
+                ),
+              ),
         ),
         routes: {
           AppRoutes.HOME: (ctx) => ProductOverviewPage(),
