@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop/components/cart_item.dart';
 import 'package:shop/models/cart_list.dart';
+import 'package:shop/models/order_list.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({Key? key}) : super(key: key);
@@ -38,10 +39,7 @@ class CartPage extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text('Comprar'),
-                  ),
+                  CartButtonState(cart: cart),
                 ],
               ),
             ),
@@ -55,5 +53,44 @@ class CartPage extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class CartButtonState extends StatefulWidget {
+  final CartList cart;
+  const CartButtonState({
+    Key? key,
+    required this.cart,
+  }) : super(key: key);
+
+  @override
+  State<CartButtonState> createState() => _CartButtonStateState();
+}
+
+class _CartButtonStateState extends State<CartButtonState> {
+  bool _isLoading = false;
+  @override
+  Widget build(BuildContext context) {
+    return _isLoading
+        ? const CircularProgressIndicator()
+        : TextButton(
+            onPressed: widget.cart.itemCount == 0
+                ? null
+                : () {
+                    setState(() => _isLoading = true);
+                    Provider.of<OrderList>(
+                      context,
+                      listen: false,
+                    ).addOrder(widget.cart);
+                    widget.cart.clear();
+                    setState(() => _isLoading = false);
+                  },
+            style: TextButton.styleFrom(
+              textStyle: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            child: const Text('Comprar'),
+          );
   }
 }
